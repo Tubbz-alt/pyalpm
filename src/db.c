@@ -214,7 +214,10 @@ static PyObject* pyalpm_db_search(PyObject *rawself, PyObject *args) {
   int ok = pylist_string_to_alpmlist(args, &rawargs);
   if (ok == -1) return NULL;
 
-  result = alpm_db_search(self->c_data, rawargs);
+  ok = alpm_db_search(self->c_data, rawargs, result);
+  // TODO: handle pm_errno being set and throw an exception
+  if (ok == -1) return NULL;
+
   return alpmlist_to_pylist(result, pyalpm_package_from_pmpkg);
 }
 
